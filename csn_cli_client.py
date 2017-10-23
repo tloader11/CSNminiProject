@@ -1,7 +1,7 @@
 import socket               # Import socket module
 s = socket.socket()         # Create a socket object
-host = "127.0.0.1"                   # Get local machine name
-port = 666                  # Reserve a port for your service.
+host = "play.powergamer.nl"                   # Get local machine name
+port = 25565                  # Reserve a port for your service.
 s.connect((host, port))
 
 username = "loginnaam"

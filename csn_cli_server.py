@@ -6,7 +6,7 @@ import sys
 import csn_server_helper
 
 host = ""
-port = 666                  # used by the original Doom and by trojans. Should be free.
+port = 25565                  # used by the original Doom and by trojans. Should be free.
 s = socket.socket()         # Create a socket object
 s.bind((host, port))        # Bind to the port
 

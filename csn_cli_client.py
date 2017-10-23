@@ -1,5 +1,4 @@
 import socket               # Import socket module
-from threading import Thread
 s = socket.socket()         # Create a socket object
 host = "127.0.0.1"                   # Get local machine name
 port = 666                  # Reserve a port for your service.

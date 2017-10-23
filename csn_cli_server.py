@@ -23,7 +23,7 @@ def ListenThread(c,addr):
             data = c.recv(1024)
             #print(data)
             if(len(data)>0):
-                print(data)
+                #print(data)
                 helper.CheckPacket(data)
         except:
             print("Unexpected error:", sys.exc_info(), sys.exc_traceback())

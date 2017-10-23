@@ -65,21 +65,24 @@ while 1:
     conn, addr = x.accept()                                 #wait to accept a connection - blocking call
     print('Connected from ' + addr[0] + ':' + str(addr[1]))
     connected = True
-    while connected:
-        try:
-            data = conn.recv(1024)
-            #print(data)
-            if(len(data)>0):
-                print(data)
-                if(data[0]==1):
-                    TriggerAlarm(s,data[1])
-                if(data[0]==2):
-                    Disarm(s)
-            else:
-                connected = False
-        except:
-            print("Error receiving data")
-            print(sys.exc_traceback())
+    if(addr[0]=='127.0.0.1'):   #only accept connections from localhost (local webserver) otherwise remote injection is possible.
+        while connected:
+            try:
+                data = conn.recv(1024)
+                #print(data)
+                if(len(data)>0):
+                    print(data)
+                    if(data[0]==1):
+                        TriggerAlarm(s,data[1])
+                    if(data[0]==2):
+                        Disarm(s)
+                    connected = False
+                    conn.close()
+                else:
+                    connected = False
+            except:
+                print("Error receiving data")
+                print(sys.exc_traceback())
 
 
 

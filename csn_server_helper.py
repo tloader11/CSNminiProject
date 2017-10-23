@@ -2,6 +2,8 @@ import time
 
 import _thread
 
+from csn_aes_crypto import csn_aes_crypto
+
 
 class ServerHelper:
     c = None
@@ -9,14 +11,20 @@ class ServerHelper:
     loggedin = False
     alarm_triggered = False
     timer = 0
+    aes_encryptor = None
+    cID = 0                         #client ID, used for LED color changing
 
     def __init__(self,c,addr):
         self.c = c
         self.addr = addr
+        self.aes_encryptor = csn_aes_crypto("OurSuperSecretAEScryptoValueGreatSucces")
 
     def CheckPacket(self, data):
+        if(len(data) == 0): return
         print(data[0]) #bytes in char
         extra_test = data[1:data[0]+1]
+        extra_test = self.aes_encryptor.decrypt(extra_test)
+        print(extra_test)
         if(extra_test[0]==0):
             username_length = extra_test[1]
             username = ""
@@ -29,6 +37,7 @@ class ServerHelper:
                 password += chr(extra_test[i])
             print("Login Packet with credentials: "+ username + " , " + password)
             if(username == "loginnaam" and password == "TestPass12345"):
+                self.cID = 1
                 self.loggedin = True
 
         elif(extra_test[0]==1 and self.loggedin):

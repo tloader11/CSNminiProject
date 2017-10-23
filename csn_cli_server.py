@@ -6,7 +6,7 @@ import sys
 import csn_server_helper
 
 host = ""
-port = 25565                  # used by the original Doom and by trojans. Should be free.
+port = 666                  # used by the original Doom and by trojans. Should be free.
 s = socket.socket()         # Create a socket object
 s.bind((host, port))        # Bind to the port
 
@@ -26,8 +26,9 @@ def ListenThread(c,addr):
                 print(data)
                 helper.CheckPacket(data)
         except:
-            print("Unexpected error:", sys.exc_info())
-            try: clients.remove(helper)
+            print("Unexpected error:", sys.exc_info(), sys.exc_traceback())
+            try:
+                clients.remove(helper)
             except:
                 print("Unexpected error:", sys.exc_info())
                 return

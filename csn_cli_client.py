@@ -1,8 +1,14 @@
 import socket               # Import socket module
+
+from csn_aes_crypto import csn_aes_crypto
+
 s = socket.socket()         # Create a socket object
-host = "play.powergamer.nl"                   # Get local machine name
-port = 25565                  # Reserve a port for your service.
+host = "127.0.0.1"                   # Get local machine name
+port = 666                  # Reserve a port for your service.
 s.connect((host, port))
+
+aes_encryptor = csn_aes_crypto("OurSuperSecretAEScryptoValueGreatSucces")
+
 
 username = "loginnaam"
 password = "TestPass12345"
@@ -13,24 +19,31 @@ my_bytes.extend(map(ord, username))
 my_bytes.append(len(password))
 my_bytes.extend(map(ord, password))
 
+encrypted_message = aes_encryptor.encrypt(my_bytes.decode())
+print(encrypted_message)
+#my_bytes = bytearray(encrypted_message)
+
 lengte = bytearray()
-lengte.append(len(my_bytes))
-my_bytes = lengte + my_bytes
+lengte.append(len(encrypted_message))
+my_bytes = lengte + encrypted_message
 s.send(my_bytes)
 
+
+
 sensor = bytearray()
-sensor.append(2) #sensor length. Non-flexible
 sensor.append(1)
 sensor.append(5)
-s.send(sensor)
+mssg = aes_encryptor.encrypt(sensor.decode())
+output = bytearray({len(mssg)}) + mssg
+print(output)
+s.send(output)
 
-
-
+'''
 disarm = bytearray()
 disarm.append(1) #disarm length. Non-flexible
 disarm.append(2)
 s.send(disarm)
-
+'''
 
 #bytez =b'0'
 #bytez +=b'10'

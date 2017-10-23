@@ -55,7 +55,7 @@ class ClientConnector
 
     public function CheckBarcode($barcode)
     {
-        $barcodes = [1719402,1687289,1719406];
+        $barcodes = [1719402,1687289,1718549];
         if(in_array($barcode,$barcodes))
         {
             $this->DisarmAlarm();

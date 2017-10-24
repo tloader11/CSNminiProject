@@ -4,6 +4,7 @@ import _thread
 
 from csn_aes_crypto import csn_aes_crypto
 from packet_processor import *
+#from GPIOServerSide import *
 
 class ServerHelper:
     c = None
@@ -19,6 +20,7 @@ class ServerHelper:
         self.c = c
         self.addr = addr
         self.aes_encryptor = csn_aes_crypto("OurSuperSecretAEScryptoValueGreatSucces")
+        #armed()
 
     def CheckPacket(self, data):
         if(len(data) == 0): return
@@ -36,3 +38,4 @@ class ServerHelper:
 
     def PoundAlarm(self):
         print("Client",self.cID,"breached! Please investigate!")
+        #alarm(self) #needs to be fired in seperate thread, to prevent blocking on main thread of client.

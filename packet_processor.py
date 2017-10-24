@@ -1,5 +1,8 @@
 import _thread
 
+#from GPIOServerSide import *
+
+
 def Login(helper,data):
     username_length = data[1]
     username = ""
@@ -32,6 +35,10 @@ def AlarmGoing(helper,data):
         print("alarm type 1")
     elif type_alarm==2:
         print("alarm type 2")
+    elif type_alarm==3:
+        print("alarm type 3")
+    elif type_alarm==4:
+        print("alarm type 4")
     elif type_alarm==5:
         print("alarm type 5")
 
@@ -44,6 +51,7 @@ def AlarmArm(helper):
     helper.alarm_triggered = False
     helper.timer = 0 #time in sec.
     helper.armed = True
+    #armed()
 
 
 def ProcessPacket(helper,data, aes_encryptor):

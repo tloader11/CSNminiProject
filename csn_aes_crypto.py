@@ -23,7 +23,9 @@ class csn_aes_crypto(object):
 
     def _pad(self, s):
         return s + (self.bs - len(s) % self.bs) * chr(self.bs - len(s) % self.bs)   #padding function.
+        #return string + block_size - length string % block_size   *  block_size - length string % block_size
 
     @staticmethod
     def _unpad(s):
         return s[:-ord(s[len(s)-1:])]                       #unpad data
+        #removes the trailing 0x00 bytes from the package.

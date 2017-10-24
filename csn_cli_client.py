@@ -45,7 +45,7 @@ def TriggerAlarm(s,alarm_type):
     global aes_encryptor
     sensor = bytearray()
     sensor.append(1)
-    sensor.append(5)
+    sensor.append(alarm_type)
     mssg = aes_encryptor.encrypt(sensor.decode())
     output = bytearray({len(mssg)}) + mssg
     print("Got Trigger Request, sending:",output)

@@ -31,20 +31,17 @@ def armed():
     GPIO.output(ledRood,False)
     GPIO.output(ledGroen,True)
 
-def alarm(x):
+def alarm(helper):
     lcd.clear()
     lcd.message('Alarm triggerd:\nClient: {}'.format(x))
     GPIO.output(ledGroen,False)
-    x = 0
     while True:
-        if x < 10:
+        if helper.armed != True:
             GPIO.output(ledRood, True)
             time.sleep(1)
             GPIO.output(ledRood, False)
             time.sleep(1)
-            x += 1
         else: break
-    armed()
 
 armed()
 time.sleep(5)

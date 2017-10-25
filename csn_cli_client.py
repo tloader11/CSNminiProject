@@ -6,7 +6,7 @@ import GPIOClientSide
 from csn_aes_crypto import csn_aes_crypto
 
 s = socket.socket()         # Create a socket object
-host = "127.0.0.1"                   # Get local machine name
+host = "192.168.1.27"                   # Get local machine name
 port = 666                  # Reserve a port for your service.
 s.connect((host, port))
 
@@ -41,8 +41,10 @@ except socket.error as msg:
 #Start listening on socket
 x.listen(1)
 print('Socket now listening')
-GPIOClientSide.arm()
 
+gpio_controller = GPIOClientSide.GPIOClientSide();
+
+gpio_controller.arm()
 
 def TriggerAlarm(s,alarm_type):
     global aes_encryptor
@@ -54,8 +56,8 @@ def TriggerAlarm(s,alarm_type):
     print("Got Trigger Request, sending:",output)
     global breached
     breached = True
-    GPIOClientSide.breached = breached
-    GPIOClientSide.alarm()
+    gpio_controller.breached = breached
+    gpio_controller.alarm()
     s.send(output)
 
 def Disarm(s):
@@ -67,8 +69,8 @@ def Disarm(s):
     print("Got Disarm Request, sending:",output)
     global breached
     breached = False
-    GPIOClientSide.breached = breached
-    GPIOClientSide.arm()
+    gpio_controller.breached = breached
+    gpio_controller.arm()
     s.send(output)
 
 #now keep talking with the client

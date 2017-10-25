@@ -1,5 +1,7 @@
 import importlib.util
 
+import _thread
+
 try:
     importlib.util.find_spec('RPi.GPIO')
     import RPi.GPIO as GPIO
@@ -8,48 +10,42 @@ except ImportError:
 
 import time
 
-breached = False
 
-# Pin Config
-#import csn_cli_client
+class GPIOClientSide:
 
-ledGroen = 2
-ledRood = 3
-knopje = 17
+    ledGroen = 5
+    ledRood = 6
+    knopje = 17
+    breached = False
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(ledRood, GPIO.OUT)
-GPIO.setup(ledGroen, GPIO.OUT)
-GPIO.setup(knopje, GPIO.IN)
+    def __init__(self):
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.ledRood, GPIO.OUT)
+        GPIO.setup(self.ledGroen, GPIO.OUT)
+        GPIO.setup(self.knopje, GPIO.IN)
+        _thread.start_new_thread(self.DoButtonCheck(), ())
 
-def disarm():
-    GPIO.output(ledRood,False)
-    GPIO.output(ledGroen,True)
-    time.sleep(5)
-    arm()
+    def disarm(self):
+        GPIO.output(self.ledRood,False)
+        GPIO.output(self.ledGroen,True)
 
-def arm():
-    GPIO.output(ledRood,True)
-    GPIO.output(ledGroen,False)
+    def arm(self):
+        GPIO.output(self.ledRood,True)
+        GPIO.output(self.ledGroen,False)
 
-def alarm():
-    global breached
-    while True:
-        if breached:
-            GPIO.output(ledRood, True)
-            time.sleep(1)
-            GPIO.output(ledRood, False)
-            time.sleep(1)
-        else: break
-    arm()
-while True:
-    if GPIO.input(knopje):
-        global breached
-        breached = True
-        alarm()
-#arm()
-#time.sleep(5)
-#alarm()
-#time.sleep(5)
-#disarm()
-#GPIO.cleanup()
+    def alarm(self):
+        self.breached
+        while True:
+            if self.breached:
+                GPIO.output(self.ledRood, True)
+                time.sleep(1)
+                GPIO.output(self.ledRood, False)
+                time.sleep(1)
+            else: break
+        self.arm()
+
+    def DoButtonCheck(self):
+        while True:
+            if GPIO.input(self.knopje):
+                breached = True
+                self.alarm()

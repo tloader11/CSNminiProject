@@ -1,8 +1,17 @@
-import RPi.GPIO as GPIO
+import importlib.util
+
+try:
+    importlib.util.find_spec('RPi.GPIO')
+    import RPi.GPIO as GPIO
+except ImportError:
+    import FakeRPi.GPIO as GPIO
+
 import time
 
+breached = False
+
 # Pin Config
-import csn_cli_client
+#import csn_cli_client
 
 ledGroen = 2
 ledRood = 3
@@ -24,8 +33,9 @@ def arm():
     GPIO.output(ledGroen,False)
 
 def alarm():
+    global breached
     while True:
-        if csn_cli_client.breached:
+        if breached:
             GPIO.output(ledRood, True)
             time.sleep(1)
             GPIO.output(ledRood, False)

@@ -43,6 +43,8 @@ def alarm():
         else: break
     arm()
 if GPIO.input(knopje):
+    global breached
+    breached = True
     alarm()
 #arm()
 #time.sleep(5)

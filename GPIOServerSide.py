@@ -1,6 +1,12 @@
 import Adafruit_CharLCD as LCD
 import time
-import RPi.GPIO as GPIO
+
+import importlib.util
+try:
+    importlib.util.find_spec('RPi.GPIO')
+    import RPi.GPIO as GPIO
+except ImportError:
+    import FakeRPi.GPIO as GPIO
 
 # Pin Config:
 

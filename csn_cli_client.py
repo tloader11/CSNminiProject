@@ -1,8 +1,8 @@
 import socket               # Import socket module
 
 import sys
-
 import GPIOClientSide
+
 from csn_aes_crypto import csn_aes_crypto
 
 s = socket.socket()         # Create a socket object
@@ -54,6 +54,7 @@ def TriggerAlarm(s,alarm_type):
     print("Got Trigger Request, sending:",output)
     global breached
     breached = True
+    GPIOClientSide.breached = breached
     GPIOClientSide.alarm()
     s.send(output)
 
@@ -66,6 +67,7 @@ def Disarm(s):
     print("Got Disarm Request, sending:",output)
     global breached
     breached = False
+    GPIOClientSide.breached = breached
     GPIOClientSide.arm()
     s.send(output)
 

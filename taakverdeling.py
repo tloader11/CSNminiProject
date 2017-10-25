@@ -5,3 +5,5 @@ vincent = "GPIO -> led"
 hidde = "maken presentatie"
 
 #trello -> https://trello.com/b/nzBSnc6p/csn-miniproject
+
+

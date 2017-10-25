@@ -2,6 +2,7 @@ import socket               # Import socket module
 
 import sys
 
+import GPIOClientSide
 from csn_aes_crypto import csn_aes_crypto
 
 s = socket.socket()         # Create a socket object
@@ -11,6 +12,7 @@ s.connect((host, port))
 
 aes_encryptor = csn_aes_crypto("OurSuperSecretAEScryptoValueGreatSucces")
 
+breached = False
 
 username = "loginnaam"
 password = "TestPass12345"
@@ -39,6 +41,7 @@ except socket.error as msg:
 #Start listening on socket
 x.listen(1)
 print('Socket now listening')
+GPIOClientSide.arm()
 
 
 def TriggerAlarm(s,alarm_type):
@@ -49,6 +52,9 @@ def TriggerAlarm(s,alarm_type):
     mssg = aes_encryptor.encrypt(sensor.decode())
     output = bytearray({len(mssg)}) + mssg
     print("Got Trigger Request, sending:",output)
+    global breached
+    breached = True
+    GPIOClientSide.alarm()
     s.send(output)
 
 def Disarm(s):
@@ -58,6 +64,9 @@ def Disarm(s):
     mssg = aes_encryptor.encrypt(disarm.decode())
     output = bytearray({len(mssg)}) + mssg
     print("Got Disarm Request, sending:",output)
+    global breached
+    breached = False
+    GPIOClientSide.arm()
     s.send(output)
 
 #now keep talking with the client

@@ -56,7 +56,9 @@ def AlarmArm(helper):
 
 def ProcessPacket(helper,data, aes_encryptor):
     #print(data[0]) #bytes in char
+    print("encrypted packet", data)
     packet = aes_encryptor.decrypt(data[1:data[0]+1])
+    print("Decrypted packet", packet)
     if(packet[0]==0):           #login packet -> process login
         Login(helper,packet)
     elif(packet[0]==1):         #registering alarm -> process alarm

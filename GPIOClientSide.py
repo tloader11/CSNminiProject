@@ -2,6 +2,8 @@ import RPi.GPIO as GPIO
 import time
 
 # Pin Config
+import csn_cli_client
+
 ledGroen = 2
 ledRood = 3
 
@@ -20,19 +22,17 @@ def arm():
     GPIO.output(ledGroen,False)
 
 def alarm():
-    x = 0
     while True:
-        if x < 10:
+        if csn_cli_client.breached:
             GPIO.output(ledRood, True)
             time.sleep(1)
             GPIO.output(ledRood, False)
             time.sleep(1)
-            x += 1
         else: break
     arm()
-arm()
-time.sleep(5)
-alarm()
-time.sleep(5)
-disarm()
-GPIO.cleanup()
+#arm()
+#time.sleep(5)
+#alarm()
+#time.sleep(5)
+#disarm()
+#GPIO.cleanup()

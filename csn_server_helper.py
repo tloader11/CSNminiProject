@@ -3,7 +3,8 @@ import time
 import _thread
 
 from csn_aes_crypto import csn_aes_crypto
-
+from packet_processor import *
+#from GPIOServerSide import *
 
 class ServerHelper:
     c = None
@@ -13,57 +14,17 @@ class ServerHelper:
     timer = 0
     aes_encryptor = None
     cID = 0                         #client ID, used for LED color changing
+    armed = True
 
     def __init__(self,c,addr):
         self.c = c
         self.addr = addr
         self.aes_encryptor = csn_aes_crypto("OurSuperSecretAEScryptoValueGreatSucces")
+        #armed()
 
     def CheckPacket(self, data):
         if(len(data) == 0): return
-        print(data[0]) #bytes in char
-        extra_test = data[1:data[0]+1]
-        extra_test = self.aes_encryptor.decrypt(extra_test)
-        print(extra_test)
-        if(extra_test[0]==0):
-            username_length = extra_test[1]
-            username = ""
-            for i in range(2,username_length+2):
-                username += chr(extra_test[i])
-
-            password_length = extra_test[username_length+2]
-            password = ""
-            for i in range(username_length+3,password_length+username_length+3):
-                password += chr(extra_test[i])
-            print("Login Packet with credentials: "+ username + " , " + password)
-            if(username == "loginnaam" and password == "TestPass12345"):
-                self.cID = 1
-                self.loggedin = True
-
-        elif(extra_test[0]==1 and self.loggedin):
-            print("registering alarm")
-
-            self.alarm_triggered = True
-            self.timer = 5 #time in sec.
-            type_alarm = extra_test[1]
-
-            _thread.start_new_thread(self.RunAlarmTriggerTimer, ()) #start countdown timer.
-
-            if type_alarm==1:
-                print("alarm type 1")
-            elif type_alarm==2:
-                print("alarm type 2")
-            elif type_alarm==5:
-                print("alarm type 5")
-
-
-        elif(extra_test[0]==2 and self.loggedin):
-            print("Disarm package. Stopping timer.")
-            self.alarm_triggered = False
-            self.timer = 0
-
-        if(len(extra_test)+1 != len(data)):
-            self.CheckPacket(data[data[0]+1:])
+        ProcessPacket(self,data,self.aes_encryptor)
 
     def RunAlarmTriggerTimer(self):
         while(self.alarm_triggered == True and self.timer > 0):
@@ -76,4 +37,5 @@ class ServerHelper:
             self.PoundAlarm()
 
     def PoundAlarm(self):
-        print("Alarm gaat af!!!")
+        print("Client",self.cID,"breached! Please investigate!")
+        #alarm(self) #needs to be fired in seperate thread, to prevent blocking on main thread of client.

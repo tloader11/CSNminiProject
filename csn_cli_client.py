@@ -2,6 +2,7 @@ import socket               # Import socket module
 
 import sys
 
+import GPIOClientSide
 from csn_aes_crypto import csn_aes_crypto
 
 s = socket.socket()         # Create a socket object
@@ -11,6 +12,7 @@ s.connect((host, port))
 
 aes_encryptor = csn_aes_crypto("OurSuperSecretAEScryptoValueGreatSucces")
 
+breached = False
 
 username = "loginnaam"
 password = "TestPass12345"
@@ -39,16 +41,20 @@ except socket.error as msg:
 #Start listening on socket
 x.listen(1)
 print('Socket now listening')
+GPIOClientSide.arm()
 
 
 def TriggerAlarm(s,alarm_type):
     global aes_encryptor
     sensor = bytearray()
     sensor.append(1)
-    sensor.append(5)
+    sensor.append(alarm_type)
     mssg = aes_encryptor.encrypt(sensor.decode())
     output = bytearray({len(mssg)}) + mssg
     print("Got Trigger Request, sending:",output)
+    global breached
+    breached = True
+    GPIOClientSide.alarm()
     s.send(output)
 
 def Disarm(s):
@@ -58,6 +64,9 @@ def Disarm(s):
     mssg = aes_encryptor.encrypt(disarm.decode())
     output = bytearray({len(mssg)}) + mssg
     print("Got Disarm Request, sending:",output)
+    global breached
+    breached = False
+    GPIOClientSide.arm()
     s.send(output)
 
 #now keep talking with the client
@@ -65,21 +74,24 @@ while 1:
     conn, addr = x.accept()                                 #wait to accept a connection - blocking call
     print('Connected from ' + addr[0] + ':' + str(addr[1]))
     connected = True
-    while connected:
-        try:
-            data = conn.recv(1024)
-            #print(data)
-            if(len(data)>0):
-                print(data)
-                if(data[0]==1):
-                    TriggerAlarm(s,data[1])
-                if(data[0]==2):
-                    Disarm(s)
-            else:
-                connected = False
-        except:
-            print("Error receiving data")
-            print(sys.exc_traceback())
+    if(addr[0]=='127.0.0.1'):   #only accept connections from localhost (local webserver) otherwise remote injection is possible.
+        while connected:
+            try:
+                data = conn.recv(1024)
+                #print(data)
+                if(len(data)>0):
+                    print(data)
+                    if(data[0]==1):
+                        TriggerAlarm(s,data[1])
+                    if(data[0]==2):
+                        Disarm(s)
+                    connected = False
+                    conn.close()
+                else:
+                    connected = False
+            except:
+                print("Error receiving data")
+                print(sys.exc_traceback())
 
 
 

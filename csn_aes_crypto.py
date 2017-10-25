@@ -1,7 +1,7 @@
 import base64
 import hashlib
-from Cryptodome import Random
-from Cryptodome.Cipher import AES
+from Crypto import Random
+from Crypto.Cipher import AES
 
 class csn_aes_crypto(object):
 

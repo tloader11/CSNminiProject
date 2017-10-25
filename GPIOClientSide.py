@@ -15,10 +15,12 @@ breached = False
 
 ledGroen = 2
 ledRood = 3
+knopje = 17
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(ledRood, GPIO.OUT)
 GPIO.setup(ledGroen, GPIO.OUT)
+GPIO.setup(knopje, GPIO.IN)
 
 def disarm():
     GPIO.output(ledRood,False)
@@ -40,6 +42,8 @@ def alarm():
             time.sleep(1)
         else: break
     arm()
+if GPIO.input(knopje):
+    alarm()
 #arm()
 #time.sleep(5)
 #alarm()

@@ -11,7 +11,7 @@ import GPIOClientSide
 from csn_aes_crypto import csn_aes_crypto
 
 s = socket.socket()         # Create a socket object
-host = "192.168.42.1"                   # Get local machine name
+host = "192.168.42.7"                   # Get local machine name
 port = 666                  # Reserve a port for your service.
 s.connect((host, port))
 
@@ -19,8 +19,8 @@ aes_encryptor = csn_aes_crypto("OurSuperSecretAEScryptoValueGreatSucces")
 
 breached = False
 
-username = "login2"
-password = "Pass2"
+username = "loginnaam"
+password = "TestPass12345"
 my_bytes = bytearray()
 my_bytes.append(0)
 my_bytes.append(len(username))

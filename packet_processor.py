@@ -46,11 +46,13 @@ def AlarmDisarm(helper):
     helper.alarm_triggered = False
     helper.timer = 0 #time in sec.
     helper.armed = False
+    helper.breached = False
 
 def AlarmArm(helper):
     helper.alarm_triggered = False
     helper.timer = 0 #time in sec.
     helper.armed = True
+    helper.breached = False
     #armed()
 
 

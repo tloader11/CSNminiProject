@@ -17,6 +17,7 @@ class ServerHelper:
     cID = 0                         #client ID, used for LED color changing
     armed = True
     disarmed_lcd_showed = False
+    breached = False
 
 
     def __init__(self,c,addr):
@@ -42,10 +43,11 @@ class ServerHelper:
         elif(self.alarm_triggered == False and self.armed == True):
             lcd_text("All clients\nOK")
         elif(self.alarm_triggered == False and self.armed == False):
-            lcd_text("Client "+self.cID+"\nDisarmed")
+            lcd_text("Client "+str(self.cID)+"\nDisarmed")
 
     def PoundAlarm(self):
-        alarm(self)
+        GPIOServerSide.alarm(self)
+        self.breached = True
         print("Client",self.cID,"breached! Please investigate!")
         #alarm(self) #needs to be fired in seperate thread, to prevent blocking on main thread of client.
 

@@ -24,14 +24,18 @@ def ListenThread(c,addr):
             #print(data)
             if(len(data)>0):
                 #print(data)
-                helper.CheckPacket(data)
+                helper.CheckPacket(data,clients)
         except:
-            print("Unexpected error:", sys.exc_info(), sys.exc_traceback())
+            #print("Unexpected error:", sys.exc_info(), sys.exc_traceback())
             try:
                 clients.remove(helper)
             except:
-                print("Unexpected error:", sys.exc_info())
+                #print("Unexpected error:", sys.exc_info())
                 return
+    try:
+        clients.remove(helper)
+    except:
+        pass
 
 while True:
     #always listen for new connections

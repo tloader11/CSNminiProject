@@ -54,15 +54,15 @@ def armed(helper):
         s = ""
         clientlist = list(triggered)
         for cID in clientlist:
-            print(cID)
+            #print(cID)
             s+=str(cID)+" "
         lcd.message("Clients\nBreached:"+s)
     elif ShowedMessageArmed==False:
         ShowedMessageArmed = True
         ShowedMessageDisarmed = False
         ShowedMessageAlarm = False
-        lcd.clear()
-        lcd.message('All clients\nOK')
+        #lcd.clear()
+        #lcd.message('All clients\nOK')
         GPIO.output(ledRood,False)
         GPIO.output(ledGroen,True)
 
@@ -96,7 +96,7 @@ def alarm(helper):
         s = ""
         clientlist = list(triggered)
         for cID in clientlist:
-            print(cID)
+            #print(cID)
             s+=str(cID)+" "
         lcd.message('Alarm triggerd:\nClient: {}'.format(s))
         ShowedMessageArmed = False
@@ -109,11 +109,3 @@ def alarm(helper):
     GPIO.output(ledRood, False)
     time.sleep(1)
 
-'''
-armed()
-time.sleep(5)
-alarm(3)
-time.sleep(5)
-GPIO.output(ledGroen,False)
-lcd.clear()
-'''

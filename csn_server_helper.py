@@ -29,9 +29,9 @@ class ServerHelper:
         GPIOServerSide.lcd_text("Vincent heeft\nhonger")
         _thread.start_new_thread(self.ButtonController, ())
 
-    def CheckPacket(self, data):
+    def CheckPacket(self, data,clients):
         if(len(data) == 0): return
-        ProcessPacket(self,data,self.aes_encryptor)
+        ProcessPacket(self,data,self.aes_encryptor,clients)
 
     def RunAlarmTriggerTimer(self):
         while(self.alarm_triggered == True and self.timer > 0):

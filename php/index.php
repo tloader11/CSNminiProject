@@ -73,7 +73,7 @@ else if($status==2)
     <title>Client 2</title>
 </head>
 <body>
-<div class="col-md-4"></div>
+<div class="col-md-4 extrawidth"></div>
 <div class = "container col-md-3">
     <table class = "table">
         <thead>
@@ -87,8 +87,9 @@ else if($status==2)
         </tr>
         </tbody>
     </table>
-    <button type="button" class="btn btn-success col-xs-2" id = "arm">Arm</button>
-    <button type="button" class="btn btn-danger disarm_button" id = "disarm">Disarm</button>
+    <button type="button" class="btn btn-warning col-xs-2" id = "arm">Arm</button>
+    <button type="button" class="btn btn-success disarm_button" id = "disarm">Disarm</button>
+    <button type="button" class="btn btn-danger disarm_button" id = "trigger">Trigger</button>
 </div>
 
 </body>
@@ -120,6 +121,9 @@ else if($status==2)
         else{
             alert("Already disarmed!");
         }
+    });
+    $('#trigger').on('click', function (e) {
+        window.location.replace("index.php?q=1");
     });
     setTimeout(function(){
 

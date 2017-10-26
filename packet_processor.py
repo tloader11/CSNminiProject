@@ -1,6 +1,7 @@
 import _thread
 
 #from GPIOServerSide import *
+import csn_server_php_helper
 
 
 def Login(helper,data):
@@ -56,19 +57,26 @@ def AlarmArm(helper):
     #armed()
 
 
-def ProcessPacket(helper,data, aes_encryptor):
+def ProcessPacket(helper,data, aes_encryptor,clients):
     #print(data[0]) #bytes in char
     print("encrypted packet", data)
-    packet = aes_encryptor.decrypt(data[1:data[0]+1])
-    print("Decrypted packet", packet)
-    if(packet[0]==0):           #login packet -> process login
-        Login(helper,packet)
-    elif(packet[0]==1):         #registering alarm -> process alarm
-        AlarmGoing(helper,packet)
-    elif(packet[0]==2):
-        AlarmDisarm(helper)
-    elif(packet[0]==3):
-        AlarmArm(helper)
+    if len(data[1:data[0]+1]) % 64 != 0:
+        #php packet, process different!
+        packet = data[1:data[0]+1]
+        if(packet[0]==60):
+            #packet >=60 == PHP!!!!!
+            csn_server_php_helper.ProcessPHP(helper.c,clients)
+    else:
+        packet = aes_encryptor.decrypt(data[1:data[0]+1])
+        print("Decrypted packet", packet)
+        if(packet[0]==0):           #login packet -> process login
+            Login(helper,packet)
+        elif(packet[0]==1):         #registering alarm -> process alarm
+            AlarmGoing(helper,packet)
+        elif(packet[0]==2):
+            AlarmDisarm(helper)
+        elif(packet[0]==3):
+            AlarmArm(helper)
 
     if(len(data[1:data[0]+1])+1 != len(data)):
             ProcessPacket(helper,data[data[0]+1:],aes_encryptor)

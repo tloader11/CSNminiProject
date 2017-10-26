@@ -33,7 +33,10 @@ lcd_columns, lcd_rows, lcd_backlight)
 triggered = []
 
 def armed(helper):
-    triggered.remove(helper.cID)
+    try:
+        triggered.remove(helper.cID)
+    except:
+        pass
     helper.disarmed_lcd_showed = False
     if len(triggered) > 0:
         lcd.clear()
@@ -54,7 +57,10 @@ def lcd_text(text):
 def disarm(helper):
     print(helper.disarmed_lcd_showed)
     if helper.disarmed_lcd_showed == False:
-        triggered.remove(helper.cID)
+        try:
+            triggered.remove(helper.cID)
+        except:
+            pass
         lcd.message("Client "+helper.cID+"\nDisarmed")
         helper.disarmed_lcd_showed = True
         time.sleep(2)

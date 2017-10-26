@@ -66,12 +66,12 @@ def lcd_text(text):
     lcd.message(text)
 
 def disarm(helper):
-    print(helper.disarmed_lcd_showed)
     if helper.disarmed_lcd_showed == False:
         try:
             triggered.remove(helper.cID)
         except:
             pass
+        lcd.clear()
         lcd.message("Client "+str(helper.cID)+"\nDisarmed")
         helper.disarmed_lcd_showed = True
         time.sleep(2)

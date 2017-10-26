@@ -70,7 +70,7 @@ else if($status==2)
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="css/custom.css" >
-    <title>Client 2</title>
+    <title>Client</title>
 </head>
 <body>
 <div class="col-md-4 extrawidth"></div>
@@ -129,7 +129,7 @@ else if($status==2)
 
         window.location.replace("index.php");
 
-    }, 7000);
+    }, 2000);
 
 </script>
 <!--

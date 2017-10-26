@@ -78,5 +78,14 @@ foreach($data as $client)
     </table>
 </div>
 
+<script type="text/javascript">
+setTimeout(function(){
+
+window.location.replace("server.php");
+
+}, 2000);
+
+</script>
+
 </body>
 </html>

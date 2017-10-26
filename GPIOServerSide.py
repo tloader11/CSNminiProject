@@ -88,7 +88,7 @@ def disarm(helper):
 def alarm(helper):
     global ShowedMessageArmed,ShowedMessageAlarm,ShowedMessageDisarmed
     if ShowedMessageAlarm == False:
-        triggered.append(helper.cID)
+        triggered.add(helper.cID)
         lcd.clear()
         lcd.message('Alarm triggerd:\nClient: {}'.format(helper.cID))
         ShowedMessageArmed = False

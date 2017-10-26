@@ -57,6 +57,7 @@ class ServerHelper:
             elif self.armed:
                 GPIOServerSide.armed(self)
             elif self.armed == False:
+                print("DISARMED --> GPIO CODE")
                 GPIOServerSide.disarm(self)
 
 

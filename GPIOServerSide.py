@@ -52,6 +52,7 @@ def lcd_text(text):
     lcd.message(text)
 
 def disarm(helper):
+    print(helper.disarmed_lcd_showed)
     if helper.disarmed_lcd_showed == False:
         triggered.remove(helper.cID)
         lcd.message("Client "+helper.cID+"\nDisarmed")

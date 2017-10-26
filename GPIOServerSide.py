@@ -92,7 +92,11 @@ def alarm(helper):
     if ShowedMessageAlarm == False:
         triggered.add(helper.cID)
         lcd.clear()
-        lcd.message('Alarm triggerd:\nClient: {}'.format(helper.cID))
+        s = ""
+        for cID in triggered:
+            print(cID)
+            s+=str(cID)+" "
+        lcd.message('Alarm triggerd:\nClient: {}'.format(s))
         ShowedMessageArmed = False
         ShowedMessageDisarmed = False
         ShowedMessageAlarm = True

@@ -50,6 +50,7 @@ class ServerHelper:
     def PoundAlarm(self):
         GPIOServerSide.alarm(self)
         self.breached = True
+        GPIOServerSide.ShowedMessageAlarm = False
         print("Client",self.cID,"breached! Please investigate!")
         #alarm(self) #needs to be fired in seperate thread, to prevent blocking on main thread of client.
 

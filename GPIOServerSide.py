@@ -66,6 +66,10 @@ def lcd_text(text):
     lcd.message(text)
 
 def disarm(helper):
+    global ShowedMessageArmed,ShowedMessageAlarm,ShowedMessageDisarmed
+    ShowedMessageArmed = False
+    ShowedMessageDisarmed = True
+    ShowedMessageAlarm = False
     if helper.disarmed_lcd_showed == False:
         try:
             triggered.remove(helper.cID)

@@ -25,6 +25,8 @@ class ServerHelper:
         self.addr = addr
         self.aes_encryptor = csn_aes_crypto("OurSuperSecretAEScryptoValueGreatSucces")
         #armed()
+        GPIOServerSide.ClearLCD()
+        GPIOServerSide.lcd_text("Vincent heeft\nhonger")
         _thread.start_new_thread(self.ButtonController, ())
 
     def CheckPacket(self, data):

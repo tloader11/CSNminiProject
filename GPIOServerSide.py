@@ -36,6 +36,9 @@ ShowedMessageArmed = False
 ShowedMessageDisarmed = False
 ShowedMessageAlarm = False
 
+def ClearLCD():
+    lcd.clear()
+
 def armed(helper):
     global ShowedMessageArmed,ShowedMessageAlarm,ShowedMessageDisarmed
     try:

@@ -134,13 +134,13 @@ time.sleep(5)
 gpio_controller.breached = True
 print("alarm")
 time.sleep(7)
-gpio_controller.armed = False
-gpio_controller.breached = False
-print("disarm")
-time.sleep(5)
-gpio_controller.armed = True
-print("arm")
-time.sleep(5)
+#gpio_controller.armed = False
+#gpio_controller.breached = False
+#print("disarm")
+#time.sleep(5)
+#gpio_controller.armed = True
+#print("arm")
+#time.sleep(5)
 
 #now keep talking with the client
 while 1:

@@ -52,7 +52,8 @@ def armed(helper):
         ShowedMessageAlarm = False
         lcd.clear()
         s = ""
-        for cID in triggered:
+        clientlist = list(triggered)
+        for cID in clientlist:
             print(cID)
             s+=str(cID)+" "
         lcd.message("Clients\nBreached:"+s)
@@ -93,7 +94,8 @@ def alarm(helper):
         triggered.add(helper.cID)
         lcd.clear()
         s = ""
-        for cID in triggered:
+        clientlist = list(triggered)
+        for cID in clientlist:
             print(cID)
             s+=str(cID)+" "
         lcd.message('Alarm triggerd:\nClient: {}'.format(s))

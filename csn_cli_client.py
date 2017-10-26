@@ -99,22 +99,31 @@ def ButtonController():
         while True:
             if gpio_controller.breached and gpio_controller.armed:
                 #print("AlarmLoop")
-                if status != 1:
-                    TriggerAlarm(1)
-                    status = 1
                 gpio_controller.alarm()
+                if status != 1:
+                    status = 1
+                    try:
+                        TriggerAlarm(1)
+                    except:
+                        continue
             elif gpio_controller.armed:
                 #print("ArmLoop")
-                if status != 0:
-                    Arm()
-                    status = 0
                 gpio_controller.arm()
+                if status != 0:
+                    status = 0
+                    try:
+                        Arm()
+                    except:
+                        continue
             elif gpio_controller.armed == False:
                 #print("DisarmedLoop")
-                if status != 2:
-                    Disarm()
-                    status = 2
                 gpio_controller.disarm()
+                if status != 2:
+                    status = 2
+                    try:
+                        Disarm()
+                    except:
+                        continue
 
 _thread.start_new_thread(ButtonController, ())
 _thread.start_new_thread(gpio_controller.DoButtonCheck, ())
@@ -168,5 +177,7 @@ while 1:
                 else:
                     connected = False
             except:
-                print("Error receiving data")
-                print(sys.exc_traceback())
+                gpio_controller.armed = True
+                gpio_controller.breached = True
+                print("A LOT of possible errors here.")
+                #print(sys.exc_traceback())

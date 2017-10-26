@@ -37,10 +37,10 @@ class GPIOClientSide:
 
     def alarm(self):
         GPIO.output(self.ledRood, True)
-        print("Rood True")
+        #print("Rood True")     #DEBUG
         time.sleep(1)
         GPIO.output(self.ledRood, False)
-        print("Rood False")
+        #print("Rood False")    #DEBUG
         time.sleep(1)
 
     def DoButtonCheck(self):

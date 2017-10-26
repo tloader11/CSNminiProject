@@ -52,7 +52,9 @@ def armed(helper):
         ShowedMessageAlarm = False
         lcd.clear()
         s = ""
-        for cID in triggered: s+=str(cID)+" "
+        for cID in triggered:
+            print(cID)
+            s+=str(cID)+" "
         lcd.message("Clients\nBreached:"+s)
     elif ShowedMessageArmed==False:
         ShowedMessageArmed = True

@@ -71,6 +71,8 @@ def disarm(helper):
     ShowedMessageDisarmed = True
     ShowedMessageAlarm = False
     if helper.disarmed_lcd_showed == False:
+        GPIO.output(ledRood,False)
+        GPIO.output(ledGroen,True)
         try:
             triggered.remove(helper.cID)
         except:

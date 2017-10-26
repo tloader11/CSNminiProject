@@ -32,18 +32,29 @@ lcd_columns, lcd_rows, lcd_backlight)
 
 triggered = []
 
+ShowedMessageArmed = False
+ShowedMessageDisarmed = False
+ShowedMessageAlarm = False
+
 def armed(helper):
+    global ShowedMessageArmed,ShowedMessageAlarm,ShowedMessageDisarmed
     try:
         triggered.remove(helper.cID)
     except:
         pass
     helper.disarmed_lcd_showed = False
-    if len(triggered) > 0:
+    if len(triggered) > 0 and ShowedMessageArmed==False:
+        ShowedMessageArmed = True
+        ShowedMessageDisarmed = False
+        ShowedMessageAlarm = False
         lcd.clear()
         s = ""
         for cID in triggered: s+=str(cID)+" "
         lcd.message("Clients\nBreached:"+s)
-    else:
+    elif ShowedMessageArmed==False:
+        ShowedMessageArmed = True
+        ShowedMessageDisarmed = False
+        ShowedMessageAlarm = False
         lcd.clear()
         lcd.message('All clients\nOK')
         GPIO.output(ledRood,False)
@@ -61,14 +72,20 @@ def disarm(helper):
             triggered.remove(helper.cID)
         except:
             pass
-        lcd.message("Client "+helper.cID+"\nDisarmed")
+        lcd.message("Client "+str(helper.cID)+"\nDisarmed")
         helper.disarmed_lcd_showed = True
         time.sleep(2)
 
 def alarm(helper):
-    triggered.append(helper.cID)
-    lcd.clear()
-    lcd.message('Alarm triggerd:\nClient: {}'.format(helper.cID))
+    global ShowedMessageArmed,ShowedMessageAlarm,ShowedMessageDisarmed
+    if ShowedMessageAlarm == False:
+        triggered.append(helper.cID)
+        lcd.clear()
+        lcd.message('Alarm triggerd:\nClient: {}'.format(helper.cID))
+        ShowedMessageArmed = False
+        ShowedMessageDisarmed = False
+        ShowedMessageAlarm = True
+
     GPIO.output(ledGroen,False)
     GPIO.output(ledRood, True)
     time.sleep(1)

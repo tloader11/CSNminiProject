@@ -11,7 +11,7 @@ import GPIOClientSide
 from csn_aes_crypto import csn_aes_crypto
 
 s = socket.socket()         # Create a socket object
-host = "192.168.1.27"                   # Get local machine name
+host = "192.168.42.1"                   # Get local machine name
 port = 666                  # Reserve a port for your service.
 s.connect((host, port))
 

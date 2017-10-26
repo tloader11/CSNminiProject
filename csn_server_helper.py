@@ -18,11 +18,13 @@ class ServerHelper:
     armed = True
     disarmed_lcd_showed = False
 
+
     def __init__(self,c,addr):
         self.c = c
         self.addr = addr
         self.aes_encryptor = csn_aes_crypto("OurSuperSecretAEScryptoValueGreatSucces")
         #armed()
+        _thread.start_new_thread(self.ButtonController, ())
 
     def CheckPacket(self, data):
         if(len(data) == 0): return
@@ -56,3 +58,5 @@ class ServerHelper:
                 GPIOServerSide.armed(self)
             elif self.armed == False:
                 GPIOServerSide.disarm(self)
+
+

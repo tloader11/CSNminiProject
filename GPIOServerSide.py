@@ -67,10 +67,7 @@ def lcd_text(text):
 
 def disarm(helper):
     global ShowedMessageArmed,ShowedMessageAlarm,ShowedMessageDisarmed
-    ShowedMessageArmed = False
-    ShowedMessageDisarmed = True
-    ShowedMessageAlarm = False
-    if helper.disarmed_lcd_showed == False:
+    if ShowedMessageDisarmed == False:
         GPIO.output(ledRood,False)
         GPIO.output(ledGroen,True)
         try:
@@ -80,6 +77,9 @@ def disarm(helper):
         lcd.clear()
         lcd.message("Client "+str(helper.cID)+"\nDisarmed")
         helper.disarmed_lcd_showed = True
+        ShowedMessageArmed = False
+        ShowedMessageDisarmed = True
+        ShowedMessageAlarm = False
         time.sleep(2)
 
 def alarm(helper):

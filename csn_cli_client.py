@@ -19,8 +19,8 @@ aes_encryptor = csn_aes_crypto("OurSuperSecretAEScryptoValueGreatSucces")
 
 breached = False
 
-username = "loginnaam"
-password = "TestPass12345"
+username = "login2"
+password = "Pass2"
 my_bytes = bytearray()
 my_bytes.append(0)
 my_bytes.append(len(username))

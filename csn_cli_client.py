@@ -1,6 +1,11 @@
 import socket               # Import socket module
 
 import sys
+
+import time
+
+import _thread
+
 import GPIOClientSide
 
 from csn_aes_crypto import csn_aes_crypto
@@ -39,15 +44,15 @@ except socket.error as msg:
     sys.exit()
 
 #Start listening on socket
-x.listen(1)
+x.listen(3)
 print('Socket now listening')
 
-gpio_controller = GPIOClientSide.GPIOClientSide();
-
-gpio_controller.arm()
-
-def TriggerAlarm(s,alarm_type):
+def TriggerAlarm(alarm_type, c=None):
     global aes_encryptor
+    if c==None:
+        global s
+    else:
+        s = c
     sensor = bytearray()
     sensor.append(1)
     sensor.append(alarm_type)
@@ -56,11 +61,13 @@ def TriggerAlarm(s,alarm_type):
     print("Got Trigger Request, sending:",output)
     global breached
     breached = True
-    gpio_controller.breached = breached
-    gpio_controller.alarm()
     s.send(output)
 
-def Disarm(s):
+def Disarm(c=None):
+    if c==None:
+        global s
+    else:
+        s = c
     global aes_encryptor
     disarm = bytearray()
     disarm.append(2)
@@ -69,16 +76,69 @@ def Disarm(s):
     print("Got Disarm Request, sending:",output)
     global breached
     breached = False
-    gpio_controller.breached = breached
-    gpio_controller.arm()
     s.send(output)
+
+def Arm(c=None):
+    if c==None:
+        global s
+    else:
+        s = c
+    disarm = bytearray()
+    disarm.append(3)
+    mssg = aes_encryptor.encrypt(disarm.decode())
+    output = bytearray({len(mssg)}) + mssg
+    print("Got Arm Request, sending:",output)
+    global breached
+    breached = False
+    s.send(output)
+
+gpio_controller = GPIOClientSide.GPIOClientSide()
+status = 0
+def ButtonController():
+        global status
+        while True:
+            if gpio_controller.breached and gpio_controller.armed:
+                #print("AlarmLoop")
+                if status != 1:
+                    TriggerAlarm(1)
+                    status = 1
+                gpio_controller.alarm()
+            elif gpio_controller.armed:
+                #print("ArmLoop")
+                if status != 0:
+                    Arm()
+                    status = 0
+                gpio_controller.arm()
+            elif gpio_controller.armed == False:
+                #print("DisarmedLoop")
+                if status != 2:
+                    Disarm()
+                    status = 2
+                gpio_controller.disarm()
+
+_thread.start_new_thread(ButtonController, ())
+_thread.start_new_thread(gpio_controller.DoButtonCheck, ())
+
+gpio_controller.armed = True
+print("arm")
+time.sleep(5)
+gpio_controller.breached = True
+print("alarm")
+time.sleep(7)
+gpio_controller.armed = False
+gpio_controller.breached = False
+print("disarm")
+time.sleep(5)
+gpio_controller.armed = True
+print("arm")
+time.sleep(5)
 
 #now keep talking with the client
 while 1:
     conn, addr = x.accept()                                 #wait to accept a connection - blocking call
     print('Connected from ' + addr[0] + ':' + str(addr[1]))
     connected = True
-    if(addr[0]=='127.0.0.1'):   #only accept connections from localhost (local webserver) otherwise remote injection is possible.
+    if True: #(addr[0]=='127.0.0.1'):   #only accept connections from localhost (local webserver) otherwise remote injection is possible.
         while connected:
             try:
                 data = conn.recv(1024)
@@ -86,9 +146,23 @@ while 1:
                 if(len(data)>0):
                     print(data)
                     if(data[0]==1):
-                        TriggerAlarm(s,data[1])
-                    if(data[0]==2):
+                        TriggerAlarm(data[1],s)
+                        gpio_controller.breached = True
+                    elif(data[0]==2):
                         Disarm(s)
+                        gpio_controller.breached = False
+                        gpio_controller.armed = False
+                    elif(data[0]==3):
+                        Arm(s)
+                        gpio_controller.armed = True
+                        gpio_controller.breached = False
+                    elif(data[0]==4):
+                        status_p = bytearray()
+                        status_p.append(status)
+                        print("Sending Status Byte, sending:",status_p)
+                        global breached
+                        breached = False
+                        conn.send(status_p)
                     connected = False
                     conn.close()
                 else:
@@ -96,26 +170,3 @@ while 1:
             except:
                 print("Error receiving data")
                 print(sys.exc_traceback())
-
-
-
-
-
-'''
-disarm = bytearray()
-disarm.append(1) #disarm length. Non-flexible
-disarm.append(2)
-s.send(disarm)
-'''
-
-#bytez =b'0'
-#bytez +=b'10'
-#s.send(bytez + bytes("testtestte".encode("utf8")))
-'''
-while True:
-    bytez = b''
-    bytez +=b'0'
-    bytez +=b'10'
-    s.send(bytez + bytes("testtestte".encode("utf8")))
-    #s.send(bytes(input(),'utf-8'))
-'''

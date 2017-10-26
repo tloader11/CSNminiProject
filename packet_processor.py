@@ -32,7 +32,7 @@ def AlarmGoing(helper,data):
     _thread.start_new_thread(helper.RunAlarmTriggerTimer, ()) #start countdown timer.
 
     if type_alarm==1:
-        print("alarm type 1")
+        print("Druk Button")
     elif type_alarm==2:
         print("alarm type 2")
     elif type_alarm==3:

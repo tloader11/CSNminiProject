@@ -7,7 +7,7 @@ class ClientConnector
     public $socket = null;
     public function ClientConnector()
     {
-        $this->address = "127.0.0.1";
+        $this->address = "192.168.1.66"; //"127.0.0.1";
         $this->service_port = 667; //DOOM
 
         /* Create a TCP/IP socket. */
@@ -15,15 +15,15 @@ class ClientConnector
         if ($this->socket === false) {
             echo "socket_create() failed: reason: " . socket_strerror(socket_last_error()) . "\n";
         } else {
-            echo "OK.\n";
+            //echo "OK.\n";
         }
 
-        echo "Attempting to connect to '$this->address' on port '$this->service_port'...";
+        //echo "Attempting to connect to '$this->address' on port '$this->service_port'...";
         $result = socket_connect($this->socket, $this->address, $this->service_port);
         if ($result === false) {
             echo "socket_connect() failed.\nReason: ($result) " . socket_strerror(socket_last_error($this->socket)) . "\n";
         } else {
-            echo "OK.\n";
+            //echo "OK.\n";
         }
     }
 
@@ -61,6 +61,13 @@ class ClientConnector
             $s .= chr($byte);
         }
         return $s;
+    }
+
+    public function GetStatus()
+    {
+        $s = chr(4);
+        socket_write($this->socket,$s);
+        return unpack("s",socket_read($this->socket,1,PHP_BINARY_READ)."\x00")[1];
     }
 
     public function CheckBarcode($barcode)

@@ -129,11 +129,11 @@ _thread.start_new_thread(ButtonController, ())
 _thread.start_new_thread(gpio_controller.DoButtonCheck, ())
 
 gpio_controller.armed = True
-print("arm")
-time.sleep(5)
-gpio_controller.breached = True
-print("alarm")
-time.sleep(7)
+print("System Armed")
+#time.sleep(5)
+#gpio_controller.breached = True
+#print("alarm")
+#time.sleep(7)
 #gpio_controller.armed = False
 #gpio_controller.breached = False
 #print("disarm")

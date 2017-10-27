@@ -13,6 +13,7 @@ import time
 
 class GPIOClientSide:
 
+    #pin layout
     ledGroen = 6
     ledRood = 5
     knopje = 4
@@ -45,6 +46,7 @@ class GPIOClientSide:
         #print("Rood False")    #DEBUG
         time.sleep(1)
 
+    #checks if one of the buttons is pressed, called from csn_cli_client in a separate thread.
     def DoButtonCheck(self):
         while True:
             if GPIO.input(self.knopje) == True or GPIO.input(self.knopje2) == True:

@@ -48,6 +48,9 @@ x.listen(3)
 print('Socket now listening')
 
 def TriggerAlarm(alarm_type, c=None):
+    """
+        Sends the server an alarm triggered message
+    """
     global aes_encryptor
     if c==None:
         global s
@@ -64,6 +67,9 @@ def TriggerAlarm(alarm_type, c=None):
     s.send(output)
 
 def Disarm(c=None):
+    """
+        Sends the server an alarm disarmed message
+    """
     if c==None:
         global s
     else:
@@ -79,6 +85,9 @@ def Disarm(c=None):
     s.send(output)
 
 def Arm(c=None):
+    """
+        Sends the server an alarm armed message
+    """
     if c==None:
         global s
     else:
@@ -94,6 +103,10 @@ def Arm(c=None):
 
 gpio_controller = GPIOClientSide.GPIOClientSide()
 status = 0
+
+"""
+    Loops, makes sure the LED GPIO code is triggered
+"""
 def ButtonController():
         global status
         while True:
@@ -130,19 +143,11 @@ _thread.start_new_thread(gpio_controller.DoButtonCheck, ())
 
 gpio_controller.armed = True
 print("System Armed")
-#time.sleep(5)
-#gpio_controller.breached = True
-#print("alarm")
-#time.sleep(7)
-#gpio_controller.armed = False
-#gpio_controller.breached = False
-#print("disarm")
-#time.sleep(5)
-#gpio_controller.armed = True
-#print("arm")
-#time.sleep(5)
 
 #now keep talking with the client
+"""
+    Receives and processes data from the PHP client interface.
+"""
 while 1:
     conn, addr = x.accept()                                 #wait to accept a connection - blocking call
     print('Connected from ' + addr[0] + ':' + str(addr[1]))
@@ -177,7 +182,7 @@ while 1:
                 else:
                     connected = False
             except:
-                gpio_controller.armed = True
+                gpio_controller.armed = True            #on any error, trigger the alarm. (Server disconnect...)
                 gpio_controller.breached = True
                 print("A LOT of possible errors here.")
                 #print(sys.exc_traceback())

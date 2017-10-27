@@ -24,16 +24,16 @@ def ListenThread(c,addr):
             #print(data)
             if(len(data)>0):
                 #print(data)
-                helper.CheckPacket(data,clients)
+                helper.CheckPacket(data,clients)    #process the incoming packet(s)
         except:
             #print("Unexpected error:", sys.exc_info(), sys.exc_traceback())
             try:
-                clients.remove(helper)
+                clients.remove(helper)  #remove client from client list
             except:
                 #print("Unexpected error:", sys.exc_info())
                 return
     try:
-        clients.remove(helper)
+        clients.remove(helper)  #remove client from client list
     except:
         pass
 

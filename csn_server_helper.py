@@ -23,17 +23,18 @@ class ServerHelper:
     def __init__(self,c,addr):
         self.c = c
         self.addr = addr
-        self.aes_encryptor = csn_aes_crypto("OurSuperSecretAEScryptoValueGreatSucces")
+        self.aes_encryptor = csn_aes_crypto("OurSuperSecretAEScryptoValueGreatSucces")  #initialize AES en/decryptor.
         #armed()
-        GPIOServerSide.ClearLCD()
-        GPIOServerSide.lcd_text("Vincent heeft\nhonger")
-        _thread.start_new_thread(self.ButtonController, ())
+        _thread.start_new_thread(self.ButtonController, ())     #fire new thread to keep the LED's up to date.
 
     def CheckPacket(self, data,clients):
         if(len(data) == 0): return
-        ProcessPacket(self,data,self.aes_encryptor,clients)
+        ProcessPacket(self,data,self.aes_encryptor,clients) #just forwarding incoming packets packets.
 
     def RunAlarmTriggerTimer(self):
+        """
+            Automatically runned when a client was armed and got 'triggered' into alarm state.
+        """
         while(self.alarm_triggered == True and self.timer > 0):
 
             print("Timing:",self.timer)
@@ -48,6 +49,9 @@ class ServerHelper:
             lcd_text("Client "+str(self.cID)+"\nDisarmed")
 
     def PoundAlarm(self):
+        """
+            Makes sure the "Alarm message" is showed on the LCD and sets the breached flag to true.
+        """
         GPIOServerSide.alarm(self)
         self.breached = True
         GPIOServerSide.ShowedMessageAlarm = False
@@ -55,6 +59,9 @@ class ServerHelper:
         #alarm(self) #needs to be fired in seperate thread, to prevent blocking on main thread of client.
 
     def ButtonController(self):
+        """
+            checks the flags and triggers the functions that controll the LEDs
+        """
         while True:
             if self.breached and self.armed:
                 #print("AlarmLoop")
